@@ -11,9 +11,24 @@ export default function ModalComponent(props) {
                 {props.children}
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="primary" onClick={props.handleClose}>
-                Save Changes
-            </Button>
+                {
+                    props.buttons ? props.buttons.map((btn,index) => 
+                        <Button 
+                            key={index} 
+                            variant={btn.color} 
+                            onClick={btn.onClick}
+                        >
+                            {btn.label}
+                        </Button>
+                    ) :
+
+                        <Button 
+                            variant="primary" 
+                            onClick={props.handleClose}
+                        >
+                            Save Changes
+                        </Button>
+                }
             </Modal.Footer>
         </Modal>
     )

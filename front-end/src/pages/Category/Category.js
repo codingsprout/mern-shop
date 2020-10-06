@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import CheckboxTree from 'react-checkbox-tree'
-import { addCategory, getAllCategory, UpdateCategory } from '../../action/Action'
+import { addCategory, getAllCategory, UpdateCategory, DeleteCategory } from '../../action/Action'
 import * as BiIcons from 'react-icons/bi'
 import * as IoIcons from 'react-icons/io'
 import ModalComponent from '../../components/UI/Modal/Modal'
@@ -26,8 +26,9 @@ export default function Category() {
     const [checkedArray, setCheckedArray] = useState([])
     const [expandedArray, setExpandedArray] = useState([])
     const [updateCategoryModal, setUpdateCategoryModal] = useState(false)
+    const [deleteCategoryModal, setDeleteCategoryModal] = useState(false)
 
-    const renderCategories = (categories) => {
+   const renderCategories = (categories) => {
 
         let myCategories = []
         for(let category of categories) {
@@ -76,29 +77,9 @@ export default function Category() {
         setShow(false);
     }
 
-    const updateCategory = () => {
-        setUpdateCategoryModal(true)
-        const categories = createCategoryList(category.categories)
-        const checkedArray = []
-        const expandedArray = []
-
-        checked.length > 0 && checked.forEach((categoryId, index) => {
-            const category = categories.find((category, INDEX) => 
-            categoryId == category.value)
-            category && checkedArray.push(category)
-        })
-
-        expanded.length > 0 && expanded.forEach((categoryId, index) => {
-            const category = categories.find((category, INDEX) => 
-            categoryId == category.value)
-            category && expandedArray.push(category)
-        })
-
-        setCheckedArray(checkedArray) // bind state
-        setExpandedArray(expandedArray) // bind state
-
-
-        console.log({checked, expanded, categories, checkedArray, expandedArray})
+    const updateCategory = () => { 
+        updateCheckedAndExpandedCategory()
+        setUpdateCategoryModal(true) 
     }
 
     const handleCategoryInput = (key, value, index, type) => {
@@ -276,6 +257,76 @@ export default function Category() {
         )
     }
 
+    const deleteCategory = () => { 
+        updateCheckedAndExpandedCategory()
+        setDeleteCategoryModal(true) 
+    }
+
+    const deleteThisCategory = () => {
+
+        const checkArrayId = checkedArray.map((item, index) => ({_id: item.value}))
+        const expandArrayId = expandedArray.map((item, index) => ({_id: item.value}))
+        const ArrayId = expandArrayId.concat(checkArrayId)
+
+        dispatch(DeleteCategory(ArrayId))
+        .then(result => {
+            if(result) { 
+                dispatch(getAllCategory())
+                setDeleteCategoryModal(false) 
+            }
+        })
+
+    }
+
+    const renderDeleteCategoryModal = () => {
+        return (
+            <ModalComponent
+                modalTitle='Confirm'
+                show={deleteCategoryModal}
+                handleClose={() => setDeleteCategoryModal(false)}
+                buttons={[
+                    {
+                        label: 'Yes',
+                        color: 'primary',
+                        onClick: deleteThisCategory
+                    },
+                    {
+                        label: 'No',
+                        color: 'danger',
+                        onClick: () => { alert('no') }
+                    },
+                ]}
+            >
+                <h5>Expanded Category</h5>
+                { expandedArray.map((item, index) => <span key={index}>{item.name}</span>) }
+
+                <h5>Checked Category</h5>
+                { checkedArray.map((item, index) => <span key={index}>{item.name}</span>) }
+            </ModalComponent>
+        )
+    }
+
+    const updateCheckedAndExpandedCategory = () => {
+        const categories = createCategoryList(category.categories)
+        const checkedArray = []
+        const expandedArray = []
+
+        checked.length > 0 && checked.forEach((categoryId, index) => {
+            const category = categories.find((category, INDEX) => 
+            categoryId == category.value)
+            category && checkedArray.push(category)
+        })
+
+        expanded.length > 0 && expanded.forEach((categoryId, index) => {
+            const category = categories.find((category, INDEX) => 
+            categoryId == category.value)
+            category && expandedArray.push(category)
+        })
+
+        setCheckedArray(checkedArray) // bind state
+        setExpandedArray(expandedArray) // bind state
+    }
+
     return (
         <Layout sidebar>
             <Container>
@@ -308,13 +359,14 @@ export default function Category() {
                 </Row>
 
                 <Row>
-                    <button>Delete</button>
+                    <button onClick={deleteCategory}>Delete</button>
                     <button onClick={updateCategory}>Edit</button>
                 </Row>
             </Container>
 
             {renderAddCategoryModal()}
             {renderUpdateCategoryModal()}
+            {renderDeleteCategoryModal()}
           
         </Layout>
     )

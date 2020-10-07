@@ -29,17 +29,22 @@ export const getAllCategory = () => {
 export const addCategory = (form) => {
     return async dispatch => {
         dispatch({ type: categoryConstant.ADD_CATEGORY_REQUEST })
-        const res = await axios.post('/category/create', form)
-        if (res.status === 201) {
-            dispatch({
-                type: categoryConstant.ADD_CATEGORY_SUCCESS,
-                payload: { category: res.data.category }  
-            })
-        } else {
-            dispatch ({
-                type: categoryConstant.ADD_CATEGORY_FAILURE,
-                payload: res.data.error
-            })
+
+        try {
+            const res = await axios.post('/category/create', form)
+            if (res.status === 201) {
+                dispatch({
+                    type: categoryConstant.ADD_CATEGORY_SUCCESS,
+                    payload: { category: res.data.category }  
+                })
+            } else {
+                dispatch ({
+                    type: categoryConstant.ADD_CATEGORY_FAILURE,
+                    payload: res.data.error
+                })
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 }

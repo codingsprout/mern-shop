@@ -44,7 +44,7 @@ export const addCategory = (form) => {
                 })
             }
         } catch (err) {
-            console.log(err)
+            console.log(err.response)
         }
     }
 }

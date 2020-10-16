@@ -19,6 +19,7 @@ export default function Layout(props) {
             <Col md={2} className="sidebar">
               <ul>
                 <li><NavLink exact to={`/`}><BsIcons.BsFillHouseFill /><span>Home</span></NavLink></li>
+                <li><NavLink to={`/page`}><BsIcons.BsPencil /><span>Page</span></NavLink></li>
                 <li><NavLink to={`/category`}><BiIcons.BiBook /><span>Category</span></NavLink></li>
                 <li><NavLink to={`/services`}><MdIcons.MdRoomService /><span>Service</span></NavLink></li>
                 <li><NavLink to={`/orders`}><BiIcons.BiCartAlt /><span>Orders</span></NavLink></li>

@@ -19,7 +19,8 @@ function createCategory(categories, parentId = null) {
             _id: cate._id, 
             name: cate.name, 
             slug: cate.slug,
-            parentId: cate.parentId, 
+            parentId: cate.parentId,
+            type: cate.type, 
             children: createCategory(categories, cate._id)
         })
 
@@ -95,7 +96,7 @@ exports.deleteCategory = async (req, res) => {
         deletedCategory.push(deleteCategory)
     }
 
-    if(deletedCategory.length === ids.length) {
+    if(deletedCategory.length == ids.length) {
         res.status(201).json({ message: 'Categories removed!' })
     } else {
         res.status(400).json({ message: 'Something went wrong! WTF?' })

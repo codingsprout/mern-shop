@@ -24,9 +24,12 @@ export default function ModalComponent(props) {
 
                         <Button 
                             variant="primary" 
+                            {...props}
+                            style={{backgroundColor: '#301934', color: '#e30b5d'}}
+                            className='btn-sm'
                             onClick={props.handleClose}
                         >
-                            Save Changes
+                            Save
                         </Button>
                 }
             </Modal.Footer>

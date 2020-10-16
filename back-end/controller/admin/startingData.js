@@ -18,7 +18,8 @@ function createCategory(categories, parentId = null) {
             _id: cate._id, 
             name: cate.name, 
             slug: cate.slug,
-            parentId: cate.parentId, 
+            parentId: cate.parentId,
+            type: cate.type, 
             children: createCategory(categories, cate._id)
         })
 
@@ -31,10 +32,10 @@ exports.startingData = async (req, res) => {
 
     const categories = await Category.find({}).exec()
     const services = await Service
-                            .find({})
-                            .select('_id name price quantity slug description servicePictures category')
-                            .populate({ path: 'category', select: '_id name' })
-                            .exec()
+        .find({})
+        .select('_id name price quantity slug description servicePictures category')
+        .populate({ path: 'category', select: '_id name' })
+        .exec()
 
     res.status(200).json({ 
         categories: createCategory(categories), 

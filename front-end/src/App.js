@@ -7,6 +7,7 @@ import PrivateRoute from './components/HOC/PrivateRoute';
 import Category from './pages/Category/Category';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import NewPage from './pages/NewPage/NewPage';
 import Orders from './pages/Orders/Orders';
 import Register from './pages/Register/Register';
 import Service from './pages/Services/Service';
@@ -29,6 +30,7 @@ function App() {
         <Switch>
 
           <PrivateRoute path='/' exact component={Home} />
+          <PrivateRoute path='/page' component={NewPage} />
           <PrivateRoute path='/services' component={Service} />
           <PrivateRoute path='/orders' component={Orders} />
           <PrivateRoute path='/category' component={Category} />
